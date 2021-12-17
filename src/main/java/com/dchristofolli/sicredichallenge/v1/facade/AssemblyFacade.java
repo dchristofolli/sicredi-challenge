@@ -3,8 +3,10 @@ package com.dchristofolli.sicredichallenge.v1.facade;
 import com.dchristofolli.sicredichallenge.exception.AgendaNotFoundException;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaResponse;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
+import com.dchristofolli.sicredichallenge.v1.mapper.SessionMapper;
 import com.dchristofolli.sicredichallenge.v1.service.AgendaService;
 import com.dchristofolli.sicredichallenge.v1.service.SessionService;
 import lombok.AllArgsConstructor;
@@ -34,5 +36,9 @@ public class AssemblyFacade {
             sessionRequest.setMinutesRemaining(1L);
         }
         return mapEntityToModel(sessionService.createVotingSession(mapModelToEntity(sessionRequest)));
+    }
+
+    public SessionListResponse findAllOpenSessions() {
+        return SessionMapper.mapToSessionList(sessionService.findAllOpenSessions());
     }
 }

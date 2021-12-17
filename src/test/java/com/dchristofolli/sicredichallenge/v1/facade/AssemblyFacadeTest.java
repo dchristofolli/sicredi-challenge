@@ -2,6 +2,7 @@ package com.dchristofolli.sicredichallenge.v1.facade;
 
 import com.dchristofolli.sicredichallenge.Stub;
 import com.dchristofolli.sicredichallenge.domain.model.SessionEntity;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
 import com.dchristofolli.sicredichallenge.v1.service.AgendaService;
 import com.dchristofolli.sicredichallenge.v1.service.SessionService;
@@ -11,6 +12,9 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.time.Instant;
+import java.util.Collections;
 
 import static com.dchristofolli.sicredichallenge.Stub.agendaEntityStub;
 import static com.dchristofolli.sicredichallenge.Stub.agendaRequestStub;
@@ -39,5 +43,14 @@ class AssemblyFacadeTest {
             .thenReturn(Stub.sessionEntityStub());
         SessionResponse votingSession = assemblyFacade.createVotingSession(Stub.sessionRequestStub());
         assertEquals(Stub.sessionResponseStub(), votingSession);
+    }
+    @Test
+    void findAllOpenSessions() {
+        when(sessionService.findAllOpenSessions()).thenReturn(Collections.singletonList(
+            SessionEntity.builder().sessionId("1").sessionCloseTime(Instant.now().plusSeconds(60L))
+                .build()));
+        assertEquals(SessionListResponse.builder().list(Collections.singletonList(
+                SessionResponse.builder().sessionId("1").secondsRemaining(59L).build())).quantity(1)
+            .build(), assemblyFacade.findAllOpenSessions());
     }
 }

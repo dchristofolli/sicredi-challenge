@@ -9,8 +9,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.Instant;
+import java.util.Collections;
+
 import static com.dchristofolli.sicredichallenge.Stub.sessionEntityStub;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -29,5 +33,13 @@ class SessionServiceTest {
         assertEquals(sessionEntityStub().getAgendaId(), votingSession.getAgendaId());
         assertEquals(sessionEntityStub().getMessageAlreadySent(), votingSession.getMessageAlreadySent());
         assertEquals(sessionEntityStub().getCpfAlreadyVoted(), votingSession.getCpfAlreadyVoted());
+    }
+    @Test
+    void shouldFindAllOpenSessions() {
+        SessionEntity sessionEntity = SessionEntity.builder()
+            .sessionCloseTime(Instant.now().plusSeconds(60)).build();
+        given(sessionRepository.findAll()).willReturn(Collections.singletonList(sessionEntity));
+        sessionService.findAllOpenSessions();
+        assertEquals(Collections.singletonList(sessionEntity), sessionService.findAllOpenSessions());
     }
 }
