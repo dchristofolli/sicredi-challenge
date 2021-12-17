@@ -4,6 +4,7 @@ import com.dchristofolli.sicredichallenge.domain.model.AgendaEntity;
 import com.dchristofolli.sicredichallenge.domain.model.SessionEntity;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionRequest;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -38,6 +39,12 @@ public class Stub {
         return SessionRequest.builder()
             .agendaId("1")
             .minutesRemaining(10L)
+            .build();
+    }
+    public static SessionResponse sessionResponseStub() {
+        return SessionResponse.builder()
+            .sessionId("123456")
+            .secondsRemaining(59L)
             .build();
     }
 }
