@@ -15,4 +15,8 @@ public class AgendaService {
     public AgendaEntity save(AgendaRequest agendaRequest) {
         return agendaRepository.save(mapAgendaToEntity(agendaRequest));
     }
+
+    public boolean existsById(String agendaId) {
+        return agendaRepository.existsById(agendaId);
+    }
 }

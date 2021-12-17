@@ -2,6 +2,8 @@ package com.dchristofolli.sicredichallenge.v1.controller;
 
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaResponse;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionRequest;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
 import com.dchristofolli.sicredichallenge.v1.facade.AssemblyFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,5 +28,14 @@ public class AdminController {
     @PostMapping("/agenda")
     public AgendaResponse createAgenda(@Valid @RequestBody AgendaRequest agendaRequest) {
         return assemblyFacade.createAgenda(agendaRequest);
+    }
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(description = "Creates a voting session, receiving the agenda id and the duration of the session.")
+    @ApiResponse(responseCode = "201", description = "Open session")
+    @ApiResponse(responseCode = "400", description = "Bad request")
+    @ApiResponse(responseCode = "500", description = "Bad server")
+    @PostMapping("/session")
+    public SessionResponse createSession(@RequestBody SessionRequest sessionRequest) {
+        return assemblyFacade.createVotingSession(sessionRequest);
     }
 }

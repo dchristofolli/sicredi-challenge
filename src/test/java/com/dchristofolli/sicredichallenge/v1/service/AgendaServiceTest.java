@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -33,5 +34,11 @@ class AgendaServiceTest {
             .thenReturn(Stub.agendaEntityStub());
         AgendaEntity entity = agendaService.save(Stub.agendaRequestStub());
         assertEquals(Stub.agendaEntityStub(), entity);
+    }
+    @Test
+    void shouldExistsById() {
+        when(agendaRepository.existsById("123456")).thenReturn(true);
+        boolean existsById = agendaService.existsById("123456");
+        assertTrue(existsById);
     }
 }

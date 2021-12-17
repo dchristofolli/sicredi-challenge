@@ -65,4 +65,16 @@ class AdminControllerTest {
             .andDo(print())
             .andExpect(MockMvcResultMatchers.status().isCreated());
     }
+    @Test
+    void shouldCreateSession() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+        String request = writer.writeValueAsString(Stub.sessionRequestStub());
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/admin/session")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(request))
+            .andDo(print())
+            .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
 }
