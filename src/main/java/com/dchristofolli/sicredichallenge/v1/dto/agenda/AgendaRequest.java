@@ -1,4 +1,4 @@
-package com.sicredi.sicredichallenge.v1.dto.agenda;
+package com.dchristofolli.sicredichallenge.v1.dto.agenda;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;

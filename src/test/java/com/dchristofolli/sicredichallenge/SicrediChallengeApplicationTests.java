@@ -1,4 +1,4 @@
-package com.sicredi.sicredichallenge;
+package com.dchristofolli.sicredichallenge;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

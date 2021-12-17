@@ -1,7 +1,8 @@
-package com.sicredi.sicredichallenge.v1.controller;
+package com.dchristofolli.sicredichallenge.v1.controller;
 
-import com.sicredi.sicredichallenge.v1.dto.agenda.AgendaRequest;
-import com.sicredi.sicredichallenge.v1.dto.agenda.AgendaResponse;
+import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaRequest;
+import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaResponse;
+import com.dchristofolli.sicredichallenge.v1.facade.AssemblyFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,8 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @RequestMapping(path = "/v1/admin")
 public class AdminController {
+    private final AssemblyFacade assemblyFacade;
+
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Creates a new agenda")
     @ApiResponse(responseCode = "201", description = "Agenda successfully registered")
@@ -22,6 +25,6 @@ public class AdminController {
 
     @PostMapping("/agenda")
     public AgendaResponse createAgenda(@Valid @RequestBody AgendaRequest agendaRequest) {
-        return null;
+        return assemblyFacade.createAgenda(agendaRequest);
     }
 }
