@@ -1,7 +1,9 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.1'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version "${springframeworkVersion}"
+	id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
 	id 'java'
+	id 'jacoco'
+	id "org.sonarqube" version "${sonarqubeVersion}"
 }
 
 group = 'com.sicredi'
@@ -17,6 +19,8 @@ configurations {
 repositories {
 	mavenCentral()
 }
+apply from: "$rootDir/plugins/jacoco.gradle"
+apply from: "$rootDir/plugins/sonarqube.gradle"
 
 ext {
 	set('springCloudVersion', "2021.0.0")

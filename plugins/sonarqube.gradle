@@ -1,0 +1,23 @@
+apply plugin: "org.sonarqube"
+sonarqube {
+    properties {
+        property "sonar.projectKey", "dchristofolli_cooperative-assembly"
+        property "sonar.organization", "dchristofolli"
+        property "sonar.projectVersion", rootProject.version
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.login", System.getenv("SONAR_TOKEN")
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.scm.provider", "git"
+        property "sonar.dependencyCheck.xmlReportPath", "build/reports/dependencyCheck/dependency-check-report.xml"
+        property "sonar.dependencyCheck.htmlReportPath", "build/reports/dependencyCheck/dependency-check-report.html"
+        property "sonar.exclusions", ["build/**", "**/configurations/**, **/*Exception.java, **/Handler.java"]
+        property "sonar.import_unknown_files", true
+        property "sonar.jacoco.reportPaths", fileTree(dir: project.projectDir, includes: ["**/*.exec", "**/*.ec"])
+        property "sonar.test.exclusions", "**/test/*"
+    }
+}
+
+tasks.sonarqube.with {
+    dependsOn test
+    dependsOn jacocoTestReport
+}
