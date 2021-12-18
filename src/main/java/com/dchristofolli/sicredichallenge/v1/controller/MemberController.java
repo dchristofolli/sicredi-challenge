@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,14 +39,16 @@ public class MemberController {
         return assemblyFacade.findAllOpenSessions();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Allows a member to vote on an agenda that has an active session")
-    @ApiResponse(responseCode = "200", description = "Vote successfully registered")
+    @ApiResponse(responseCode = "201", description = "Vote successfully registered")
     @ApiResponse(responseCode = "400", description = "Bad request")
     @ApiResponse(responseCode = "500", description = "An error occurred on the server")
     @PostMapping("/votes")
     public VoteModel vote(@Valid @RequestBody VoteModel voteModel) {
         return assemblyFacade.vote(voteModel);
     }
+
     @Operation(description = "Displays the result of closed polls")
     @ApiResponse(responseCode = "200", description = "Results found")
     @ApiResponse(responseCode = "400", description = "Session is still open")

@@ -5,7 +5,6 @@ import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaResponse;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 @Generated
 public class AgendaMapper {
     public static AgendaEntity mapAgendaToEntity(AgendaRequest agendaRequest) {

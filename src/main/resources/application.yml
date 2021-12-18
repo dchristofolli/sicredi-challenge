@@ -2,3 +2,13 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost/db_assembly
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+session-result:
+  kafka:
+    topic: results.topic
+logging:
+  level:
+    org:
+      apache:
+        kafka: OFF

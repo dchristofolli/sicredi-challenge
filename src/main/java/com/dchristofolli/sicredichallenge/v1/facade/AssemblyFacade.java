@@ -12,10 +12,15 @@ import com.dchristofolli.sicredichallenge.v1.dto.vote.VoteModel;
 import com.dchristofolli.sicredichallenge.v1.mapper.SessionMapper;
 import com.dchristofolli.sicredichallenge.v1.service.AgendaService;
 import com.dchristofolli.sicredichallenge.v1.service.CpfService;
+import com.dchristofolli.sicredichallenge.v1.service.KafkaService;
 import com.dchristofolli.sicredichallenge.v1.service.SessionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 import static com.dchristofolli.sicredichallenge.v1.mapper.AgendaMapper.mapEntityToResponse;
 import static com.dchristofolli.sicredichallenge.v1.mapper.AgendaMapper.mapToAgendaList;
@@ -24,10 +29,12 @@ import static com.dchristofolli.sicredichallenge.v1.mapper.SessionMapper.mapMode
 
 @Component
 @AllArgsConstructor
+@EnableScheduling
 public class AssemblyFacade {
     private final AgendaService agendaService;
     private final SessionService sessionService;
     private final CpfService cpfService;
+    private final KafkaService kafkaService;
 
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
         return mapEntityToResponse(agendaService.save(agendaRequest));
@@ -37,8 +44,7 @@ public class AssemblyFacade {
         if (!agendaService.existsById(sessionRequest.getAgendaId())) {
             throw new AgendaNotFoundException("Agenda not found", HttpStatus.NOT_FOUND);
         }
-        if (sessionRequest.getMinutesRemaining().equals(0L)
-            || sessionRequest.getMinutesRemaining() == null) {
+        if (sessionRequest.getMinutesRemaining() == null || sessionRequest.getMinutesRemaining().equals(0L)) {
             sessionRequest.setMinutesRemaining(1L);
         }
         return mapEntityToModel(sessionService.createVotingSession(mapModelToEntity(sessionRequest)));
@@ -70,5 +76,18 @@ public class AssemblyFacade {
             throw new SessionIsStillActiveException("The session is still active", HttpStatus.FORBIDDEN);
         }
         return sessionService.checkSessionResult(sessionId);
+    }
+
+    @Scheduled(fixedDelay = 1000)
+    public void sendResults() {
+        sessionService.getSessionResultsForTopic()
+            .parallelStream()
+            .filter(result ->
+                Objects.equals(sessionService.findSessionById(result.getSessionId())
+                    .getMessageAlreadySent(), "N"))
+            .map(kafkaService::makeRecord)
+            .forEach(kafkaService::send);
+        sessionService.findAllClosedSessions()
+            .forEach(sessionService::setMessageAlreadySent);
     }
 }

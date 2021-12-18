@@ -16,11 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.dchristofolli.sicredichallenge.Stub.sessionEntityStub;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -98,6 +100,14 @@ class SessionServiceTest {
         sessionRepository.findById("123456");
         assertEquals(true, sessionService.alreadyVotedOnThisSession(vote));
     }
+    @Test
+    void shouldFindAllClosedSessionsWhenOk() {
+        SessionEntity sessionEntity = SessionEntity.builder()
+            .sessionCloseTime(Instant.now().minusSeconds(60)).build();
+        given(sessionRepository.findAll()).willReturn(Collections.singletonList(sessionEntity));
+        sessionService.findAllClosedSessions();
+        assertEquals(Collections.singletonList(sessionEntity), sessionService.findAllClosedSessions());
+    }
 
     @Test
     void checkSessionResult() {
@@ -112,5 +122,32 @@ class SessionServiceTest {
         when(sessionRepository.findById("123456")).thenReturn(Optional.of(session));
         sessionService.checkSessionResult("123456");
         assertEquals(result, sessionService.checkSessionResult("123456"));
+    }
+    @Test
+    void getSessionResultsForTopicOk() {
+        SessionEntity session = sessionEntityStub();
+        session.setSessionCloseTime(Instant.now().minusSeconds(60));
+        SessionResult result = SessionResult.builder()
+            .sessionId("123456")
+            .agendaId("123")
+            .favor(1L)
+            .against(0L)
+            .total(1)
+            .build();
+        List<SessionResult> resultList = Collections.singletonList(result);
+        when(sessionRepository.findAll().parallelStream()
+            .filter(a -> a.getSessionCloseTime().isBefore(Instant.now()))
+            .collect(Collectors.toList())).thenReturn(Collections.singletonList(session));
+        when(sessionRepository.findById("123456")).thenReturn(Optional.of(session));
+        List<SessionResult> results = sessionService.getSessionResultsForTopic();
+        assertEquals(resultList, results);
+    }
+    @Test
+    void shouldSetMessageAlreadySent() {
+        SessionEntity session = sessionEntityStub();
+        session.setMessageAlreadySent("S");
+        when(sessionRepository.save(session)).thenReturn(session);
+        sessionService.setMessageAlreadySent(session);
+        verify(sessionRepository).save(session);
     }
 }

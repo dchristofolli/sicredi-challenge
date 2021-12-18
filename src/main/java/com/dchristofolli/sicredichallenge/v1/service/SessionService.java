@@ -68,4 +68,21 @@ public class SessionService {
             .total(votes.size())
             .build();
     }
+    public List<SessionEntity> findAllClosedSessions() {
+        return sessionRepository.findAll().parallelStream()
+            .filter(a -> a.getSessionCloseTime().isBefore(Instant.now()))
+            .collect(Collectors.toList());
+    }
+
+    public List<SessionResult> getSessionResultsForTopic() {
+        return findAllClosedSessions()
+            .parallelStream()
+            .map(s -> checkSessionResult(s.getSessionId()))
+            .collect(Collectors.toList());
+    }
+
+    public void setMessageAlreadySent(SessionEntity sessionEntity) {
+        sessionEntity.setMessageAlreadySent("S");
+        sessionRepository.save(sessionEntity);
+    }
 }

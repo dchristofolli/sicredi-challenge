@@ -2,10 +2,9 @@ package com.dchristofolli.sicredichallenge.v1.facade;
 
 import com.dchristofolli.sicredichallenge.Stub;
 import com.dchristofolli.sicredichallenge.domain.model.SessionEntity;
-import com.dchristofolli.sicredichallenge.exception.InactiveSessionException;
-import com.dchristofolli.sicredichallenge.exception.UnableToVoteException;
-import com.dchristofolli.sicredichallenge.exception.UserAlreadyVotedException;
+import com.dchristofolli.sicredichallenge.exception.*;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResult;
 import com.dchristofolli.sicredichallenge.v1.dto.vote.VoteModel;
@@ -22,10 +21,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.Instant;
 import java.util.Collections;
 
-import static com.dchristofolli.sicredichallenge.Stub.agendaEntityStub;
-import static com.dchristofolli.sicredichallenge.Stub.agendaRequestStub;
+import static com.dchristofolli.sicredichallenge.Stub.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -40,7 +37,7 @@ class AssemblyFacadeTest {
     private AssemblyFacade assemblyFacade;
 
     @Test
-    void createAgenda() {
+    void shouldCreateAgendaWhenOk() {
         when(agendaService.save(agendaRequestStub())).thenReturn(agendaEntityStub());
         assemblyFacade.createAgenda(agendaRequestStub());
         assertEquals(agendaEntityStub(), agendaService.save(agendaRequestStub()));
@@ -50,9 +47,44 @@ class AssemblyFacadeTest {
     void shouldCreateVotingSession() {
         BDDMockito.when(agendaService.existsById(BDDMockito.anyString())).thenReturn(true);
         BDDMockito.when(sessionService.createVotingSession(BDDMockito.any(SessionEntity.class)))
-            .thenReturn(Stub.sessionEntityStub());
+            .thenReturn(sessionEntityStub());
         SessionResponse votingSession = assemblyFacade.createVotingSession(Stub.sessionRequestStub());
         assertEquals(Stub.sessionResponseStub(), votingSession);
+    }
+
+    @Test
+    void shouldCreateVotingSessionWithMinutesRemainingEqualsZero() {
+        SessionRequest request = sessionRequestStub();
+        request.setMinutesRemaining(0L);
+        BDDMockito.when(agendaService.existsById(BDDMockito.anyString())).thenReturn(true);
+        BDDMockito.when(sessionService.createVotingSession(BDDMockito.any(SessionEntity.class)))
+            .thenReturn(sessionEntityStub());
+        SessionResponse votingSession = assemblyFacade.createVotingSession(request);
+        assertEquals(Stub.sessionResponseStub(), votingSession);
+    }
+
+    @Test
+    void shouldCreateVotingSessionWithNullMinutesRemaining() {
+        SessionRequest request = sessionRequestStub();
+        request.setMinutesRemaining(null);
+        BDDMockito.when(agendaService.existsById(BDDMockito.anyString())).thenReturn(true);
+        BDDMockito.when(sessionService.createVotingSession(BDDMockito.any(SessionEntity.class)))
+            .thenReturn(sessionEntityStub());
+        SessionResponse votingSession = assemblyFacade.createVotingSession(request);
+        assertEquals(sessionResponseStub(), votingSession);
+    }
+
+    @Test
+    void shouldFindAllAgendas() {
+        BDDMockito.when(agendaService.findAll())
+                .thenReturn(Collections.singletonList(agendaEntityStub()));
+        assertEquals(agendaListResponseStub(), assemblyFacade.findAllAgendas());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenAgendaNotFound() {
+        SessionRequest requestStub = sessionRequestStub();
+        assertThrows(AgendaNotFoundException.class, () -> assemblyFacade.createVotingSession(requestStub));
     }
 
     @Test
@@ -74,6 +106,7 @@ class AssemblyFacadeTest {
         assemblyFacade.vote(voteModel);
         assertNull(assemblyFacade.vote(voteModel));
     }
+
     @Test
     void shouldNotVoteWhenSessionIsNotActive() {
         VoteModel voteModel = VoteModel.builder().sessionId("1").cpf("01063682061").option("S").build();
@@ -99,12 +132,29 @@ class AssemblyFacadeTest {
         when(cpfService.cpfIsUnableToVote("01063682061")).thenReturn(true);
         assertThrows(UnableToVoteException.class, () -> assemblyFacade.vote(voteModel));
     }
+
     @Test
     void shouldGetSessionResultWhenOk() {
         SessionResult result = SessionResult.builder().total(1).favor(1L).build();
         when(sessionService.sessionIsActive("1")).thenReturn(false);
         when(sessionService.checkSessionResult("1")).thenReturn(result);
-        assemblyFacade.sessionResult("1");
         assertEquals(result, assemblyFacade.sessionResult("1"));
+    }
+
+    @Test
+    void shouldThrowSessionIsStillActive() {
+        SessionResult result = SessionResult.builder().total(1).favor(1L).build();
+        when(sessionService.sessionIsActive("1")).thenReturn(true);
+        when(sessionService.checkSessionResult("1")).thenReturn(result);
+        assertThrows(SessionIsStillActiveException.class, () -> assemblyFacade.sessionResult("1"));
+    }
+
+    @Test
+    void shouldGetSessionResultEventWhenOk() {
+        BDDMockito.when(sessionService.sessionIsActive(BDDMockito.anyString())).thenReturn(false);
+        BDDMockito.when(sessionService.checkSessionResult(BDDMockito.anyString()))
+            .thenReturn(Stub.sessionResultStub());
+        SessionResult result = assemblyFacade.sessionResult("1");
+        assertEquals(Stub.sessionResultStub(), result);
     }
 }

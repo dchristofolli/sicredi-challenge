@@ -5,7 +5,6 @@ import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 import static java.time.Instant.now;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 @Generated
 public class SessionMapper {
 

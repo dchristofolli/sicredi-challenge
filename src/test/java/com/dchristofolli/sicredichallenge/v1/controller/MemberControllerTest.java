@@ -103,7 +103,7 @@ class MemberControllerTest {
                 .value("01234567891"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.option")
                 .value("N"))
-            .andExpect(MockMvcResultMatchers.status().isOk());
+            .andExpect(MockMvcResultMatchers.status().isCreated());
     }
     @Test
     void shouldGetSessionResultWhenOk() throws Exception {

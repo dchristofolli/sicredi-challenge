@@ -1,6 +1,7 @@
 package com.dchristofolli.sicredichallenge.v1.service;
 
 import com.dchristofolli.sicredichallenge.client.CpfClient;
+import com.dchristofolli.sicredichallenge.domain.model.CpfCheckingModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -22,7 +23,7 @@ class CpfServiceTest {
     @Test
     void testCpfIsAbleToVote() {
         BDDMockito.when(cpfClient.cpfChecking("44291675089"))
-            .thenReturn("ABLE_TO_VOTE");
+            .thenReturn(new CpfCheckingModel("ABLE_TO_VOTE"));
         boolean unableToVote = cpfService.cpfIsUnableToVote("44291675089");
         assertFalse(unableToVote);
     }
@@ -30,7 +31,7 @@ class CpfServiceTest {
     @Test
     void testCpfIsUnableToVote() {
         BDDMockito.when(cpfClient.cpfChecking("11111111111"))
-            .thenReturn("UNABLE_TO_VOTE");
+            .thenReturn(new CpfCheckingModel("UNABLE_TO_VOTE"));
         boolean unableToVote = cpfService.cpfIsUnableToVote("11111111111");
         assertTrue(unableToVote);
     }
