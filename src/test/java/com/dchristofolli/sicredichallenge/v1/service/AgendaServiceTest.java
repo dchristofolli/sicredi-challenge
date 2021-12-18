@@ -11,6 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
+
+import static com.dchristofolli.sicredichallenge.Stub.agendaEntityStub;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -25,20 +28,28 @@ class AgendaServiceTest {
     @BeforeEach
     void setUp() {
         BDDMockito.when(agendaRepository.save(BDDMockito.any(AgendaEntity.class)))
-            .thenReturn(Stub.agendaEntityStub());
+            .thenReturn(agendaEntityStub());
     }
 
     @Test
     void shouldSave() {
         when(agendaRepository.save(BDDMockito.any(AgendaEntity.class)))
-            .thenReturn(Stub.agendaEntityStub());
+            .thenReturn(agendaEntityStub());
         AgendaEntity entity = agendaService.save(Stub.agendaRequestStub());
-        assertEquals(Stub.agendaEntityStub(), entity);
+        assertEquals(agendaEntityStub(), entity);
     }
+
     @Test
     void shouldExistsById() {
         when(agendaRepository.existsById("123456")).thenReturn(true);
         boolean existsById = agendaService.existsById("123456");
         assertTrue(existsById);
+    }
+
+    @Test
+    void findAllAgendas() {
+        when(agendaRepository.findAll()).thenReturn(Collections.singletonList(agendaEntityStub()));
+        agendaService.findAll();
+        assertEquals(Collections.singletonList(agendaEntityStub()), agendaService.findAll());
     }
 }

@@ -47,6 +47,8 @@ class MemberControllerTest {
     void setUp() {
         BDDMockito.when(assemblyFacade.findAllOpenSessions())
             .thenReturn(Stub.sessionListResponseStub());
+        BDDMockito.when(assemblyFacade.findAllAgendas())
+            .thenReturn(Stub.agendaListResponseStub());
     }
 
     @Test
@@ -55,6 +57,18 @@ class MemberControllerTest {
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.jsonPath("$.list[0].sessionId")
                 .value("123456"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.quantity")
+                .value(1))
+            .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+    @Test
+    void shouldFindAllAgendasWhenOk() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/member/agendas"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.list[0].id")
+                .value("123456"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.list[0].subject")
+                .value("Assunto"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.quantity")
                 .value(1))
             .andExpect(MockMvcResultMatchers.status().isOk());

@@ -2,7 +2,9 @@ package com.dchristofolli.sicredichallenge;
 
 import com.dchristofolli.sicredichallenge.domain.model.AgendaEntity;
 import com.dchristofolli.sicredichallenge.domain.model.SessionEntity;
+import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaRequest;
+import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
@@ -42,15 +44,31 @@ public class Stub {
             .minutesRemaining(10L)
             .build();
     }
+
     public static SessionResponse sessionResponseStub() {
         return SessionResponse.builder()
             .sessionId("123456")
             .secondsRemaining(59L)
             .build();
     }
+
     public static SessionListResponse sessionListResponseStub() {
         return SessionListResponse.builder()
             .list(Collections.singletonList(sessionResponseStub()))
+            .quantity(1)
+            .build();
+    }
+
+    public static AgendaResponse agendaResponseStub() {
+        return AgendaResponse.builder()
+            .id("123456")
+            .subject("Assunto")
+            .build();
+    }
+
+    public static AgendaListResponse agendaListResponseStub() {
+        return AgendaListResponse.builder()
+            .list(Collections.singletonList(agendaResponseStub()))
             .quantity(1)
             .build();
     }

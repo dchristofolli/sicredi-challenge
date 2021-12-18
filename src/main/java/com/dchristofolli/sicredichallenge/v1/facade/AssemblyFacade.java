@@ -1,6 +1,7 @@
 package com.dchristofolli.sicredichallenge.v1.facade;
 
 import com.dchristofolli.sicredichallenge.exception.AgendaNotFoundException;
+import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import static com.dchristofolli.sicredichallenge.v1.mapper.AgendaMapper.mapEntityToResponse;
+import static com.dchristofolli.sicredichallenge.v1.mapper.AgendaMapper.mapToAgendaList;
 import static com.dchristofolli.sicredichallenge.v1.mapper.SessionMapper.mapEntityToModel;
 import static com.dchristofolli.sicredichallenge.v1.mapper.SessionMapper.mapModelToEntity;
 
@@ -40,5 +42,9 @@ public class AssemblyFacade {
 
     public SessionListResponse findAllOpenSessions() {
         return SessionMapper.mapToSessionList(sessionService.findAllOpenSessions());
+    }
+
+    public AgendaListResponse findAllAgendas() {
+        return mapToAgendaList(agendaService.findAll());
     }
 }

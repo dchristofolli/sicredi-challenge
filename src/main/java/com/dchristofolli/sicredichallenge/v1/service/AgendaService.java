@@ -6,6 +6,8 @@ import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.dchristofolli.sicredichallenge.v1.mapper.AgendaMapper.mapAgendaToEntity;
 
 @Service
@@ -18,5 +20,9 @@ public class AgendaService {
 
     public boolean existsById(String agendaId) {
         return agendaRepository.existsById(agendaId);
+    }
+
+    public List<AgendaEntity> findAll() {
+        return agendaRepository.findAll();
     }
 }
