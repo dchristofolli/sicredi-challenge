@@ -1,15 +1,31 @@
-version: "3"
+version: "3.9"
 services:
+  cooperative:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo/db_assembly
+    networks:
+      - backend
+    depends_on:
+      - mongo
   mongo:
     image: mongo
     ports:
       - "27017:27017"
     volumes:
       - ./mongo-data:/data/db
+    networks:
+      - backend
   mongo-express:
     image: mongo-express
     ports:
       - "8081:8081"
+    networks:
+      - backend
   kafka:
     image: wurstmeister/kafka
     container_name: kafka
@@ -22,6 +38,8 @@ services:
       KAFKA_CREATE_TOPICS: "results.topic:1:1"
     depends_on:
       - zookeeper
+    networks:
+      - backend
   zookeeper:
     image: confluent/zookeeper
     container_name: zookeeper
@@ -29,3 +47,8 @@ services:
       - "2181:2181"
     environment:
       - KAFKA_ADVERTISED_HOST_NAME=zookeeper
+    networks:
+      - backend
+networks:
+  backend:
+    driver: bridge

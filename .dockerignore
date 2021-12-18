@@ -1,0 +1,6 @@
+mongo-data
+.idea
+*.iws
+*.iml
+*.ipr
+out/
