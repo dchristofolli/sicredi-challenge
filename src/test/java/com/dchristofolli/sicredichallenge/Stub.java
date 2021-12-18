@@ -8,6 +8,7 @@ import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
+import com.dchristofolli.sicredichallenge.v1.dto.vote.VoteModel;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -70,6 +71,13 @@ public class Stub {
         return AgendaListResponse.builder()
             .list(Collections.singletonList(agendaResponseStub()))
             .quantity(1)
+            .build();
+    }
+    public static VoteModel voteModelStub() {
+        return VoteModel.builder()
+            .sessionId("123456")
+            .cpf("01234567891")
+            .option("N")
             .build();
     }
 }

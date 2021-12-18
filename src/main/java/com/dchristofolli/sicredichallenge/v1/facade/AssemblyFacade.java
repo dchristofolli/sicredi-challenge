@@ -13,6 +13,7 @@ import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.vote.VoteModel;
 import com.dchristofolli.sicredichallenge.v1.mapper.SessionMapper;
 import com.dchristofolli.sicredichallenge.v1.service.AgendaService;
+import com.dchristofolli.sicredichallenge.v1.service.CpfService;
 import com.dchristofolli.sicredichallenge.v1.service.SessionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ import static com.dchristofolli.sicredichallenge.v1.mapper.SessionMapper.mapMode
 public class AssemblyFacade {
     private final AgendaService agendaService;
     private final SessionService sessionService;
+    private final CpfService cpfService;
 
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
         return mapEntityToResponse(agendaService.save(agendaRequest));
@@ -55,6 +57,9 @@ public class AssemblyFacade {
     public VoteModel vote(VoteModel voteModel) {
         if (Boolean.FALSE.equals(sessionService.sessionIsActive(voteModel.getSessionId()))) {
             throw new InactiveSessionException("Session is not active", HttpStatus.BAD_REQUEST);
+        }
+        if (cpfService.cpfIsUnableToVote(voteModel.getCpf())) {
+            throw new UnableToVoteException("Unable to vote", HttpStatus.UNAUTHORIZED);
         }
         if (Boolean.TRUE.equals(sessionService.alreadyVotedOnThisSession(voteModel))) {
             throw new UserAlreadyVotedException("User already voted on this session", HttpStatus.FORBIDDEN);

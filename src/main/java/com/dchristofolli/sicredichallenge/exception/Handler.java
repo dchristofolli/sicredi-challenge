@@ -33,7 +33,7 @@ public class Handler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(AgendaNotFoundException.class)
-    public ErrorModel apiExceptionValidator(AgendaNotFoundException e) {
+    public ErrorModel agendaNotFountExceptionValidator(AgendaNotFoundException e) {
         return ErrorModel.builder()
             .message(e.getMessage())
             .error(e.getClass().getName())
@@ -53,7 +53,25 @@ public class Handler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(SessionNotFoundException.class)
-    public ErrorModel sessionNotFoundExceptionValidator(InactiveSessionException e) {
+    public ErrorModel sessionNotFoundExceptionValidator(SessionNotFoundException e) {
+        return ErrorModel.builder()
+            .message(e.getMessage())
+            .error(e.getClass().getName())
+            .status(e.getStatus())
+            .build();
+    }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UserAlreadyVotedException.class)
+    public ErrorModel userAlreadyVotedExceptionValidator(UserAlreadyVotedException e) {
+        return ErrorModel.builder()
+            .message(e.getMessage())
+            .error(e.getClass().getName())
+            .status(e.getStatus())
+            .build();
+    }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnableToVoteException.class)
+    public ErrorModel unableToVoteExceptionValidator(UnableToVoteException e) {
         return ErrorModel.builder()
             .message(e.getMessage())
             .error(e.getClass().getName())

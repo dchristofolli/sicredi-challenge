@@ -27,9 +27,4 @@ public class VoteModel {
   @NotBlank
   @Size(min = 1, max = 1, message = "Digite 1 caractere. As opções são 's' ou 'n'")
   private String option;
-
-  @Schema(description = "Endereço de e-mail para o qual os resultados das sessões serão enviados",
-      example = "edward.nygma@gotham.com")
-  @Email(message = "Digite um endereço de e-mail válido")
-  private String email;
 }
