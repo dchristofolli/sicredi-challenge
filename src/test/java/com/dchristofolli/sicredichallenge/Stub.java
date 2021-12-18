@@ -8,6 +8,7 @@ import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResult;
 import com.dchristofolli.sicredichallenge.v1.dto.vote.VoteModel;
 
 import java.time.Instant;
@@ -73,11 +74,22 @@ public class Stub {
             .quantity(1)
             .build();
     }
+
     public static VoteModel voteModelStub() {
         return VoteModel.builder()
             .sessionId("123456")
             .cpf("01234567891")
             .option("N")
+            .build();
+    }
+
+    public static SessionResult sessionResultStub() {
+        return SessionResult.builder()
+            .sessionId("123456")
+            .agendaId("1234")
+            .against(3L)
+            .favor(4L)
+            .total(7)
             .build();
     }
 }

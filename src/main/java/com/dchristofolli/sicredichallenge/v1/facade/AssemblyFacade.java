@@ -1,15 +1,13 @@
 package com.dchristofolli.sicredichallenge.v1.facade;
 
-import com.dchristofolli.sicredichallenge.exception.AgendaNotFoundException;
-import com.dchristofolli.sicredichallenge.exception.InactiveSessionException;
-import com.dchristofolli.sicredichallenge.exception.UnableToVoteException;
-import com.dchristofolli.sicredichallenge.exception.UserAlreadyVotedException;
+import com.dchristofolli.sicredichallenge.exception.*;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionRequest;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResult;
 import com.dchristofolli.sicredichallenge.v1.dto.vote.VoteModel;
 import com.dchristofolli.sicredichallenge.v1.mapper.SessionMapper;
 import com.dchristofolli.sicredichallenge.v1.service.AgendaService;
@@ -65,5 +63,12 @@ public class AssemblyFacade {
             throw new UserAlreadyVotedException("User already voted on this session", HttpStatus.FORBIDDEN);
         }
         return sessionService.vote(voteModel);
+    }
+
+    public SessionResult sessionResult(String sessionId) {
+        if (Boolean.TRUE.equals(sessionService.sessionIsActive(sessionId))) {
+            throw new SessionIsStillActiveException("The session is still active", HttpStatus.FORBIDDEN);
+        }
+        return sessionService.checkSessionResult(sessionId);
     }
 }

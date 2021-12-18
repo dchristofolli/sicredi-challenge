@@ -3,6 +3,7 @@ package com.dchristofolli.sicredichallenge.v1.service;
 import com.dchristofolli.sicredichallenge.domain.model.SessionEntity;
 import com.dchristofolli.sicredichallenge.domain.repository.SessionRepository;
 import com.dchristofolli.sicredichallenge.exception.SessionNotFoundException;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResult;
 import com.dchristofolli.sicredichallenge.v1.dto.vote.VoteModel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,5 +55,17 @@ public class SessionService {
         sessionEntity.setVotes(votes);
         sessionRepository.save(sessionEntity);
         return voteModel;
+    }
+
+    public SessionResult checkSessionResult(String sessionId) {
+        String agendaId = findSessionById(sessionId).getAgendaId();
+        List<String> votes = findSessionById(sessionId).getVotes();
+        return SessionResult.builder()
+            .sessionId(sessionId)
+            .agendaId(agendaId)
+            .favor(votes.parallelStream().filter(v -> v.equals("S")).count())
+            .against(votes.parallelStream().filter(v -> v.equals("N")).count())
+            .total(votes.size())
+            .build();
     }
 }

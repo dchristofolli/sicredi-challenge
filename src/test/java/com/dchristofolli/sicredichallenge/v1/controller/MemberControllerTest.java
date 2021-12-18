@@ -61,6 +61,8 @@ class MemberControllerTest {
             .thenReturn(Stub.agendaListResponseStub());
         BDDMockito.when(assemblyFacade.vote(Stub.voteModelStub()))
             .thenReturn(Stub.voteModelStub());
+        BDDMockito.when(assemblyFacade.sessionResult("123456"))
+            .thenReturn(Stub.sessionResultStub());
     }
 
     @Test
@@ -101,6 +103,24 @@ class MemberControllerTest {
                 .value("01234567891"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.option")
                 .value("N"))
+            .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+    @Test
+    void shouldGetSessionResultWhenOk() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/member/session/{sessionId}/results",
+                    "123456")
+                .contentType(APPLICATION_JSON_UTF8))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.sessionId")
+                .value("123456"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.agendaId")
+                .value("1234"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.against")
+                .value(3L))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.favor")
+                .value(4L))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.total")
+                .value(7))
             .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

@@ -2,6 +2,7 @@ package com.dchristofolli.sicredichallenge.v1.controller;
 
 import com.dchristofolli.sicredichallenge.v1.dto.agenda.AgendaListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResult;
 import com.dchristofolli.sicredichallenge.v1.dto.vote.VoteModel;
 import com.dchristofolli.sicredichallenge.v1.facade.AssemblyFacade;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -44,5 +45,14 @@ public class MemberController {
     @PostMapping("/votes")
     public VoteModel vote(@Valid @RequestBody VoteModel voteModel) {
         return assemblyFacade.vote(voteModel);
+    }
+    @Operation(description = "Displays the result of closed polls")
+    @ApiResponse(responseCode = "200", description = "Results found")
+    @ApiResponse(responseCode = "400", description = "Session is still open")
+    @ApiResponse(responseCode = "404", description = "Not found")
+    @ApiResponse(responseCode = "500", description = "Bad server")
+    @GetMapping("/session/{sessionId}/results")
+    public SessionResult sessionResult(@PathVariable String sessionId) {
+        return assemblyFacade.sessionResult(sessionId);
     }
 }

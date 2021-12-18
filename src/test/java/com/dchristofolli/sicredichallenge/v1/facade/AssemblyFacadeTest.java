@@ -7,6 +7,7 @@ import com.dchristofolli.sicredichallenge.exception.UnableToVoteException;
 import com.dchristofolli.sicredichallenge.exception.UserAlreadyVotedException;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionListResponse;
 import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResponse;
+import com.dchristofolli.sicredichallenge.v1.dto.session.SessionResult;
 import com.dchristofolli.sicredichallenge.v1.dto.vote.VoteModel;
 import com.dchristofolli.sicredichallenge.v1.service.AgendaService;
 import com.dchristofolli.sicredichallenge.v1.service.CpfService;
@@ -97,5 +98,13 @@ class AssemblyFacadeTest {
         when(sessionService.alreadyVotedOnThisSession(voteModel)).thenReturn(false);
         when(cpfService.cpfIsUnableToVote("01063682061")).thenReturn(true);
         assertThrows(UnableToVoteException.class, () -> assemblyFacade.vote(voteModel));
+    }
+    @Test
+    void shouldGetSessionResultWhenOk() {
+        SessionResult result = SessionResult.builder().total(1).favor(1L).build();
+        when(sessionService.sessionIsActive("1")).thenReturn(false);
+        when(sessionService.checkSessionResult("1")).thenReturn(result);
+        assemblyFacade.sessionResult("1");
+        assertEquals(result, assemblyFacade.sessionResult("1"));
     }
 }

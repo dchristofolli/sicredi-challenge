@@ -78,6 +78,15 @@ public class Handler {
             .status(e.getStatus())
             .build();
     }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(SessionIsStillActiveException.class)
+    public ErrorModel sessionIsStillActiveExceptionValidator(SessionIsStillActiveException e) {
+        return ErrorModel.builder()
+            .message(e.getMessage())
+            .error(e.getClass().getName())
+            .status(e.getStatus())
+            .build();
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DuplicateKeyException.class)
