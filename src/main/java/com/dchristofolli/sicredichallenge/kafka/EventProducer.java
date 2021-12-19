@@ -20,6 +20,7 @@ public class EventProducer {
   private final String topic;
 
   public void send(ProducerRecord<String, Object> producerRecord) {
+
     kafkaTemplate.send(topic, gson.toJson(producerRecord));
   }
 }

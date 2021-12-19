@@ -28,21 +28,16 @@ Para esse projeto, foram utilizadas as seguintes tecnologias:
 * Docker: Administração de containers
 
 #### Requerimentos
-
+* Java 11
 * Docker
 * Docker Compose
-* Java 11 (Opcional)
 
 #### Inicialização do sistema
-
-##### Usando somente o Docker
-
-docker-compose -f docker-compose-build.yml up --build -d
-
 ##### Usando uma IDE
-
 * docker-compose up -d
 * Executar o sistema através da IDE
+##### Usando somente o Docker(Tópico Kafka não disponível)
+docker-compose -f docker-compose-build.yml up --build -d
 
 **Importante** Os comandos descritos nesse documento devem ser executados num terminal aberto na
 pasta raiz do projeto.

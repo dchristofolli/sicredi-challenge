@@ -7,8 +7,8 @@ spring:
 session-result:
   kafka:
     topic: results.topic
-logging:
-  level:
-    org:
-      apache:
-        kafka: OFF
+#logging:
+#  level:
+#    org:
+#      apache:
+#        kafka: OFF
