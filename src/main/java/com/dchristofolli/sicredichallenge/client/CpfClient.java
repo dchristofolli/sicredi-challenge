@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Generated
 @FeignClient(value = "cpf", url = "https://user-info.herokuapp.com/users/")
 public interface CpfClient {
-    @GetMapping(value = "/{cpf}")
-    CpfCheckingModel cpfChecking(@PathVariable String cpf);
+
+  @GetMapping(value = "/{cpf}")
+  CpfCheckingModel cpfChecking(@PathVariable String cpf);
 }

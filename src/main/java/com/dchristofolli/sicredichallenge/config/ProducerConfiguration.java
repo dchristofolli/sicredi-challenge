@@ -1,5 +1,7 @@
 package com.dchristofolli.sicredichallenge.config;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -12,9 +14,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableKafka

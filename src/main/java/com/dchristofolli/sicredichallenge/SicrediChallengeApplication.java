@@ -9,7 +9,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @Generated
 @EnableFeignClients
 public class SicrediChallengeApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(SicrediChallengeApplication.class, args);
-    }
+
+  public static void main(String[] args) {
+    SpringApplication.run(SicrediChallengeApplication.class, args);
+  }
 }

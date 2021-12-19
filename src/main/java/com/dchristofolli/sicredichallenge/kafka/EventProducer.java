@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class EventProducer {
 
-    private final KafkaTemplate<String, Object> kafkaTemplate;
-    private final Gson gson;
-    @Value("${session-result.kafka.topic}")
-    private final String topic;
+  private final KafkaTemplate<String, Object> kafkaTemplate;
+  private final Gson gson;
+  @Value("${session-result.kafka.topic}")
+  private final String topic;
 
-    public void send(ProducerRecord<String, Object> producerRecord) {
-        kafkaTemplate.send(topic, gson.toJson(producerRecord));
-    }
+  public void send(ProducerRecord<String, Object> producerRecord) {
+    kafkaTemplate.send(topic, gson.toJson(producerRecord));
+  }
 }

@@ -2,11 +2,10 @@ package com.dchristofolli.sicredichallenge.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.http.HttpStatus;
-
-import java.util.Map;
 
 @Builder
 @AllArgsConstructor

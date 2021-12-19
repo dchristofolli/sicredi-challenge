@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class CpfCheckingModel {
-    private String status;
+
+  private String status;
 }

@@ -12,16 +12,17 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Generated
 public class KafkaService {
-    private final EventProducer eventProducer;
-    @Value("${session-result.kafka.topic}")
-    private final String topic;
 
-    public void send(ProducerRecord<String, Object> producerRecord) {
-        eventProducer.send(producerRecord);
-    }
+  private final EventProducer eventProducer;
+  @Value("${session-result.kafka.topic}")
+  private final String topic;
 
-    public ProducerRecord<String, Object> makeRecord(SessionResult sessionResult) {
-        return new ProducerRecord<>(topic, sessionResult.getSessionId(),
-            sessionResult);
-    }
+  public void send(ProducerRecord<String, Object> producerRecord) {
+    eventProducer.send(producerRecord);
+  }
+
+  public ProducerRecord<String, Object> makeRecord(SessionResult sessionResult) {
+    return new ProducerRecord<>(topic, sessionResult.getSessionId(),
+        sessionResult);
+  }
 }
