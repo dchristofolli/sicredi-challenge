@@ -36,7 +36,7 @@ Para esse projeto, foram utilizadas as seguintes tecnologias:
 ##### Usando uma IDE
 * docker-compose up -d
 * Executar o sistema através da IDE
-##### Usando somente o Docker(Tópico Kafka não disponível)
+##### Usando somente o Docker
 docker-compose -f docker-compose-build.yml up --build -d
 
 **Importante** Os comandos descritos nesse documento devem ser executados num terminal aberto na
